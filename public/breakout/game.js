@@ -19,6 +19,7 @@
     const cloudBadge = document.getElementById('cloudBadge');
     const lbList = document.getElementById('lbList');
     const lbStatus = document.getElementById('lbStatus');
+    const diffBtns = document.querySelectorAll('.diff-btn');
 
     // ========================================================================
     // Constants
@@ -28,14 +29,14 @@
     const CH = 360;
 
     // Paddle
-    const PW = 80;
+    let PW = 80;    // changed by difficulty
     const PH = 12;
     const PY = CH - 30;
     const PADDLE_SPEED = 6;
 
     // Ball
     const BR = 6; // radius
-    const BALL_SPEED_INIT = 4;
+    let BALL_SPEED_INIT = 3.5;  // changed by difficulty
     const BALL_SPEED_MAX = 9;
     const SPEED_INCREMENT = 0.25;
 
@@ -48,20 +49,49 @@
     const BLEFT = 10; // left margin
     const BW = (CW - BLEFT * 2 - BPAD * (BRICKS_PER_ROW - 1)) / BRICKS_PER_ROW;
 
-    const MAX_LIVES = 3;
+    let MAX_LIVES = 3;  // changed by difficulty
+    let ROW_CFG = [];    // changed by difficulty
     const MAX_ANGLE = 65 * Math.PI / 180;
     const MIN_ANGLE = 15 * Math.PI / 180;
 
-    // Row config: [color, lightColor (after 1 hit), points, maxHits]
-    const ROW_CFG = [
-        { color: '#e74c3c', light: '#f1948a', pts: 50, hits: 2 },
-        { color: '#e67e22', light: '#f0b27a', pts: 40, hits: 2 },
-        { color: '#f1c40f', light: '#f7dc6f', pts: 30, hits: 2 },
-        { color: '#2ecc71', light: '#82e0aa', pts: 20, hits: 1 },
-        { color: '#3498db', light: '#85c1e9', pts: 10, hits: 1 },
-        { color: '#9b59b6', light: '#c39bd3', pts: 5,  hits: 1 },
-    ];
+    // Difficulty presets
+    const DIFFICULTIES = {
+        easy: {
+            pw: 100, ballSpeed: 2.5, lives: 5,
+            rows: [
+                { color: '#e74c3c', light: '#f1948a', pts: 50, hits: 1 },
+                { color: '#e67e22', light: '#f0b27a', pts: 40, hits: 1 },
+                { color: '#f1c40f', light: '#f7dc6f', pts: 30, hits: 1 },
+                { color: '#2ecc71', light: '#82e0aa', pts: 20, hits: 1 },
+                { color: '#3498db', light: '#85c1e9', pts: 10, hits: 1 },
+                { color: '#9b59b6', light: '#c39bd3', pts: 5,  hits: 1 },
+            ],
+        },
+        medium: {
+            pw: 80, ballSpeed: 3.5, lives: 3,
+            rows: [
+                { color: '#e74c3c', light: '#f1948a', pts: 50, hits: 2 },
+                { color: '#e67e22', light: '#f0b27a', pts: 40, hits: 2 },
+                { color: '#f1c40f', light: '#f7dc6f', pts: 30, hits: 1 },
+                { color: '#2ecc71', light: '#82e0aa', pts: 20, hits: 1 },
+                { color: '#3498db', light: '#85c1e9', pts: 10, hits: 1 },
+                { color: '#9b59b6', light: '#c39bd3', pts: 5,  hits: 1 },
+            ],
+        },
+        hard: {
+            pw: 65, ballSpeed: 5, lives: 3,
+            rows: [
+                { color: '#e74c3c', light: '#f1948a', pts: 50, hits: 2 },
+                { color: '#e67e22', light: '#f0b27a', pts: 40, hits: 2 },
+                { color: '#f1c40f', light: '#f7dc6f', pts: 30, hits: 2 },
+                { color: '#2ecc71', light: '#82e0aa', pts: 20, hits: 1 },
+                { color: '#3498db', light: '#85c1e9', pts: 10, hits: 1 },
+                { color: '#9b59b6', light: '#c39bd3', pts: 5,  hits: 1 },
+            ],
+        },
+    };
 
+    let currentDifficulty = 'medium';
     let CLOUD_AVAILABLE = false;
 
     // ========================================================================
@@ -846,8 +876,52 @@
     }
 
     // ========================================================================
-    // Bootstrap
+    // Difficulty
     // ========================================================================
+
+    function applyDifficulty(diff) {
+        currentDifficulty = diff;
+        const cfg = DIFFICULTIES[diff];
+        PW = cfg.pw;
+        BALL_SPEED_INIT = cfg.ballSpeed;
+        MAX_LIVES = cfg.lives;
+        ROW_CFG = cfg.rows.map(r => ({ ...r }));
+        localStorage.setItem('breakoutDifficulty', diff);
+    }
+
+    // Apply saved difficulty
+    const savedDiff = localStorage.getItem('breakoutDifficulty') || 'medium';
+    applyDifficulty(savedDiff);
+    diffBtns.forEach(function (btn) {
+        if (btn.dataset.diff === savedDiff) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+
+    diffBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const diff = btn.dataset.diff;
+            if (diff === currentDifficulty) return;
+            applyDifficulty(diff);
+            diffBtns.forEach(function (b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            // Reset game if running
+            if (gameRunning) {
+                if (animFrame) cancelAnimationFrame(animFrame);
+                gameRunning = false;
+                gameOver = false;
+                overlay.classList.remove('hidden');
+                overlayContent.innerHTML = `
+                    <h2>🧱 打砖块</h2>
+                    <p>难度已切换至 ${diff === 'easy' ? '简单' : diff === 'medium' ? '中等' : '困难'}</p>
+                    <button id="startBtnNew" class="btn">开始游戏</button>
+                `;
+                document.getElementById('startBtnNew').addEventListener('click', startGame);
+            }
+        });
+    });
 
     // Load saved name
     var savedName = localStorage.getItem('breakoutPlayerName');

@@ -34,10 +34,13 @@
     let tileValues = []; // flat array of current values (for detecting changes)
 
     // ====================== Cell Geometry ======================
-    // CSS grid with 4 columns, 3% gap
-    // cellPct = (100 - 3*3) / 4 = 22.75
-    const CELL_PCT = 22.75;
+    // Grid-bg has padding: 3% and gap: 3%
+    const PAD_PCT = 3;
     const GAP_PCT = 3;
+    // Inner area (after padding): 100 - 2*3 = 94
+    // Minus 3 gaps of 3%: 94 - 9 = 85
+    // Divided into 4 cells: 85 / 4 = 21.25
+    const CELL_PCT = (100 - 2 * PAD_PCT - 3 * GAP_PCT) / 4;
 
     // ====================== Grid Rendering ======================
 
@@ -69,8 +72,8 @@
     function idx(row, col) { return row * SIZE + col; }
 
     function getCellStyle(row, col) {
-        const left = col * (CELL_PCT + GAP_PCT);
-        const top = row * (CELL_PCT + GAP_PCT);
+        const left = PAD_PCT + col * (CELL_PCT + GAP_PCT);
+        const top = PAD_PCT + row * (CELL_PCT + GAP_PCT);
         return { left: left + '%', top: top + '%', width: CELL_PCT + '%', height: CELL_PCT + '%' };
     }
 

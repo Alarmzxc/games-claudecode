@@ -15,7 +15,7 @@ body {
 }
 
 .container {
-    max-width: 520px;
+    max-width: 360px;
     width: 100%;
 }
 
@@ -403,7 +403,7 @@ kbd {
 }
 
 /* ---- Mobile ---- */
-@media (max-width: 520px) {
+@media (max-width: 400px) {
     body {
         padding: 12px;
     }
