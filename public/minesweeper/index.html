@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>扫雷 - 游戏合集</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="../index.html" class="back-btn">← 返回合集</a>
+            <h1>💣 扫雷</h1>
+            <span class="cloud-badge" id="cloudBadge">☁️ 本地</span>
+        </header>
+
+        <div class="game-area">
+            <!-- 玩家名称 + 计分板 -->
+            <div class="top-row">
+                <div class="player-input-wrap">
+                    <label for="playerName">🏷️ 玩家</label>
+                    <input type="text" id="playerName" maxlength="12" placeholder="你的昵称">
+                </div>
+                <div class="score-board">
+                    <div class="score-item">
+                        <span class="label">💣 雷</span>
+                        <span id="minesCount" class="value">10</span>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="score-item">
+                        <span class="label">⏱️ 时间</span>
+                        <span id="timer" class="value">0</span>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="score-item">
+                        <span class="label">🏆 连胜</span>
+                        <span id="gamesWon" class="value">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 笑脸 + 游戏信息 -->
+            <div class="status-bar">
+                <button id="smileyBtn" class="smiley-btn">😊</button>
+            </div>
+
+            <!-- 扫雷网格 -->
+            <div class="grid-wrapper">
+                <div id="grid" class="grid"></div>
+            </div>
+
+            <!-- 操作控制 -->
+            <div class="controls-bar">
+                <button id="newGameBtn" class="btn game-btn">🔄 新游戏</button>
+                <div class="difficulty-group">
+                    <button data-diff="beginner" class="diff-btn active">初级 9×9</button>
+                    <button data-diff="intermediate" class="diff-btn">中级 16×16</button>
+                    <button data-diff="hard" class="diff-btn">高级 30×16</button>
+                </div>
+            </div>
+
+            <!-- 排行榜 -->
+            <div class="leaderboard" id="leaderboard">
+                <div class="lb-header">
+                    <h3>🏆 排行榜</h3>
+                    <span class="lb-status" id="lbStatus">加载中...</span>
+                </div>
+                <div class="lb-list" id="lbList">
+                    <div class="lb-empty">正在连接云端...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>

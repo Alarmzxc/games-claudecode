@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>打砖块 - 游戏合集</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="../index.html" class="back-btn">← 返回合集</a>
+            <h1>🧱 打砖块</h1>
+            <span class="cloud-badge" id="cloudBadge">☁️ 本地</span>
+        </header>
+
+        <div class="game-area">
+            <!-- 玩家名称 + 计分板 -->
+            <div class="top-row">
+                <div class="player-input-wrap">
+                    <label for="playerName">🏷️ 玩家</label>
+                    <input type="text" id="playerName" maxlength="12" placeholder="你的昵称">
+                </div>
+                <div class="score-board">
+                    <div class="score-item">
+                        <span class="label">得分</span>
+                        <span id="score" class="value">0</span>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="score-item">
+                        <span class="label">最高分</span>
+                        <span id="highScore" class="value">0</span>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="score-item">
+                        <span class="label">生命</span>
+                        <span id="lives" class="value">❤️❤️❤️</span>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="score-item">
+                        <span class="label">剩余</span>
+                        <span id="bricksLeft" class="value">48</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 进度条 -->
+            <div class="progress-bar-wrap">
+                <div class="progress-track">
+                    <div id="progressFill" class="progress-fill"></div>
+                </div>
+                <span id="progressLabel" class="progress-label">0%</span>
+            </div>
+
+            <!-- 画布 -->
+            <div class="canvas-wrapper">
+                <canvas id="gameCanvas" width="480" height="360"></canvas>
+                <div id="overlay" class="overlay">
+                    <div id="overlayContent" class="overlay-content">
+                        <h2>🧱 打砖块</h2>
+                        <p>移动鼠标或 ← → 控制挡板</p>
+                        <p style="color:#888;font-size:0.85rem">按 <kbd style="background:rgba(255,255,255,0.1);padding:1px 6px;border-radius:4px;min-width:auto;display:inline;height:auto;font-size:0.75rem">Space</kbd> 开始 · <kbd style="background:rgba(255,255,255,0.1);padding:1px 6px;border-radius:4px;min-width:auto;display:inline;height:auto;font-size:0.75rem">P</kbd> 暂停</p>
+                        <button id="startBtn" class="btn">开始游戏</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 操作控制 -->
+            <div class="controls-bar">
+                <div class="control-group">
+                    <h3>⌨️ 键盘</h3>
+                    <div class="key-hint-row">
+                        <kbd>←</kbd> <kbd>→</kbd>
+                        <span class="or">或</span>
+                        <kbd>A</kbd> <kbd>D</kbd>
+                    </div>
+                    <p class="hint"><kbd>Space</kbd> 发射 · <kbd>P</kbd> 暂停</p>
+                </div>
+
+                <div class="control-group mobile-controls">
+                    <h3>🖱️ 触屏</h3>
+                    <div class="touch-btns">
+                        <div class="touch-row">
+                            <button data-dir="left" class="touch-btn">←</button>
+                            <button data-dir="right" class="touch-btn">→</button>
+                        </div>
+                        <p class="hint" style="margin-top:4px">点击画布发射</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 排行榜 -->
+            <div class="leaderboard" id="leaderboard">
+                <div class="lb-header">
+                    <h3>🏆 排行榜</h3>
+                    <span class="lb-status" id="lbStatus">加载中...</span>
+                </div>
+                <div class="lb-list" id="lbList">
+                    <div class="lb-empty">正在连接云端...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
