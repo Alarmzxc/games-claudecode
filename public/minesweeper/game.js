@@ -673,8 +673,8 @@
         startNewGame();
     });
 
-    // Prevent context menu on the whole game area
-    document.querySelector('.game-area').addEventListener('contextmenu', function (e) {
+    // Prevent context menu on the whole game area (the grid)
+    gridEl.addEventListener('contextmenu', function (e) {
         e.preventDefault();
     });
 

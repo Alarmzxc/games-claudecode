@@ -157,14 +157,14 @@
             const res = await fetch('/api/score?game=ping');
             if (res.ok || res.status === 400) {
                 CLOUD_AVAILABLE = true;
-                cloudBadge.textContent = '☁️ Connected';
+                cloudBadge.textContent = '☁️ 已连接';
                 cloudBadge.className = 'cloud-badge online';
                 return true;
             }
             throw new Error('HTTP ' + res.status);
         } catch {
             CLOUD_AVAILABLE = false;
-            cloudBadge.textContent = '☁️ Offline';
+            cloudBadge.textContent = '☁️ 离线';
             cloudBadge.className = 'cloud-badge error';
             return false;
         }
@@ -509,17 +509,17 @@
             if (CLOUD_AVAILABLE && finalScore > 0) {
                 var result = await submitScore(finalScore);
                 if (result) {
-                    cloudInfo = '<p style="color:#7dd3fc;font-size:0.8rem;margin-top:4px">Saved to cloud rank #' + (result.rank || '?') + '</p>';
+                    cloudInfo = '<p style="color:#7dd3fc;font-size:0.8rem;margin-top:4px">☁️ 已存档 · 排名 #' + (result.rank || '?') + '</p>';
                 }
             }
             overlay.classList.remove('hidden');
             overlayContent.innerHTML =
-                '<h2>Clear!</h2>' +
-                '<p>All bricks destroyed!</p>' +
-                '<p style="font-size:2rem;font-weight:700;color:#fbbf24;margin:10px 0">' + finalScore + ' pts</p>' +
-                '<p style="color:#888;font-size:0.85rem">Best: ' + highScore + (isNewHigh && finalScore > 0 ? ' NEW RECORD!' : '') + '</p>' +
+                '<h2>🎉 过关！</h2>' +
+                '<p>所有砖块已击碎！</p>' +
+                '<p style="font-size:2rem;font-weight:700;color:#fbbf24;margin:10px 0">' + finalScore + ' 分</p>' +
+                '<p style="color:#888;font-size:0.85rem">最高分: ' + highScore + (isNewHigh && finalScore > 0 ? ' 🎉 新纪录！' : '') + '</p>' +
                 cloudInfo +
-                '<button id="restartBtn" class="btn" style="margin-top:14px">Play Again</button>';
+                '<button id="restartBtn" class="btn" style="margin-top:14px">再来一局</button>';
             document.getElementById('restartBtn').addEventListener('click', startGame);
             if (CLOUD_AVAILABLE) renderLeaderboard();
         })();
@@ -542,16 +542,16 @@
             if (CLOUD_AVAILABLE && finalScore > 0) {
                 var result = await submitScore(finalScore);
                 if (result) {
-                    cloudInfo = '<p style="color:#7dd3fc;font-size:0.8rem;margin-top:4px">Saved to cloud rank #' + (result.rank || '?') + '</p>';
+                    cloudInfo = '<p style="color:#7dd3fc;font-size:0.8rem;margin-top:4px">☁️ 已存档 · 排名 #' + (result.rank || '?') + '</p>';
                 }
             }
             overlay.classList.remove('hidden');
             overlayContent.innerHTML =
-                '<h2>Game Over</h2>' +
-                '<p style="font-size:2rem;font-weight:700;color:#fbbf24;margin:14px 0">' + finalScore + ' pts</p>' +
-                '<p style="color:#888;font-size:0.85rem">Best: ' + highScore + (isNewHigh && finalScore > 0 ? ' NEW RECORD!' : '') + '</p>' +
+                '<h2>💀 游戏结束</h2>' +
+                '<p style="font-size:2rem;font-weight:700;color:#fbbf24;margin:14px 0">' + finalScore + ' 分</p>' +
+                '<p style="color:#888;font-size:0.85rem">最高分: ' + highScore + (isNewHigh && finalScore > 0 ? ' 🎉 新纪录！' : '') + '</p>' +
                 cloudInfo +
-                '<button id="restartBtn" class="btn" style="margin-top:14px">Play Again</button>';
+                '<button id="restartBtn" class="btn" style="margin-top:14px">再来一局</button>';
             document.getElementById('restartBtn').addEventListener('click', startGame);
             if (CLOUD_AVAILABLE) renderLeaderboard();
         })();
@@ -692,8 +692,8 @@
         if (paused) {
             overlay.classList.remove('hidden');
             overlayContent.innerHTML =
-                '<h2>Paused</h2>' +
-                '<p style="margin-top:8px">Press <kbd style="background:rgba(255,255,255,0.1);padding:2px 8px;border-radius:4px;min-width:auto">P</kbd> to resume</p>';
+                '<h2>⏸️ 已暂停</h2>' +
+                '<p style="margin-top:8px">按 <kbd style="background:rgba(255,255,255,0.1);padding:2px 8px;border-radius:4px;min-width:auto">P</kbd> 继续</p>';
         } else {
             overlay.classList.add('hidden');
         }
@@ -951,8 +951,8 @@
             renderLeaderboard();
             setInterval(renderLeaderboard, 60000);
         } else {
-            lbStatus.textContent = 'Offline';
-            lbList.innerHTML = '<div class="lb-empty">Cloud unavailable, scores saved locally</div>';
+            lbStatus.textContent = '离线模式';
+            lbList.innerHTML = '<div class="lb-empty">☁️ 未连接到云端，分数仅保存在本地</div>';
         }
     });
 })();

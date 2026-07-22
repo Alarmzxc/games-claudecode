@@ -3,6 +3,27 @@ import { put, list, del } from '@vercel/blob';
 const SCORE_FILE_PREFIX = 'scores_';
 
 /**
+ * Read scores array from blob storage for a given game.
+ * Uses list() to find the actual blob URL (avoids hardcoding the URL format).
+ */
+async function readScores(game) {
+    const prefix = `${SCORE_FILE_PREFIX}${game}.json`;
+    try {
+        const { blobs } = await list({ prefix });
+        if (blobs.length > 0) {
+            const resp = await fetch(blobs[0].url);
+            if (resp.ok) {
+                const data = await resp.json();
+                if (Array.isArray(data)) return data;
+            }
+        }
+    } catch {
+        // File doesn't exist yet — first submission
+    }
+    return [];
+}
+
+/**
  * POST /api/score  — 提交分数
  * Body: { game: string, score: number, player?: string }
  */
@@ -22,21 +43,8 @@ export async function POST(request) {
         const playerName = (player || '匿名玩家').trim().slice(0, 20) || '匿名玩家';
         const timestamp = Date.now();
 
-        // 读取现有分数列表
-        const blobPath = `${SCORE_FILE_PREFIX}${game}.json`;
-        let scores = [];
-        try {
-            const existingBlob = await fetch(
-                `https://blob.vercel-storage.com/${blobPath}`,
-                { headers: { Authorization: `Bearer ${process.env.BLOB_READ_WRITE_TOKEN}` } }
-            );
-            if (existingBlob.ok) {
-                const data = await existingBlob.json();
-                if (Array.isArray(data)) scores = data;
-            }
-        } catch {
-            // 文件不存在视为首次提交
-        }
+        // 读取现有分数
+        let scores = await readScores(game);
 
         // 添加新分数
         scores.push({
@@ -53,6 +61,7 @@ export async function POST(request) {
             .slice(0, 200);
 
         // 写回 Blob 存储
+        const blobPath = `${SCORE_FILE_PREFIX}${game}.json`;
         await put(blobPath, JSON.stringify(scores), {
             access: 'public',
             contentType: 'application/json',
@@ -80,26 +89,19 @@ export async function POST(request) {
 
 /**
  * GET /api/score?game=snake  — 获取该游戏的最佳分数
+ * GET /api/score?game=ping   — 健康检查（用于客户端检测云端连接）
  */
 export async function GET(request) {
     try {
         const url = new URL(request.url);
         const game = url.searchParams.get('game') || 'snake';
-        const blobPath = `${SCORE_FILE_PREFIX}${game}.json`;
 
-        let scores = [];
-        try {
-            const existingBlob = await fetch(
-                `https://blob.vercel-storage.com/${blobPath}`,
-                { headers: { Authorization: `Bearer ${process.env.BLOB_READ_WRITE_TOKEN}` } }
-            );
-            if (existingBlob.ok) {
-                const data = await existingBlob.json();
-                if (Array.isArray(data)) scores = data;
-            }
-        } catch {
-            // 无数据
+        // 健康检查
+        if (game === 'ping') {
+            return Response.json({ status: 'ok' });
         }
+
+        const scores = await readScores(game);
 
         // 每个玩家只取最高分
         const bestPerPlayer = new Map();
