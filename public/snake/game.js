@@ -40,7 +40,7 @@
     let snake = [];
     let food = {};
     let direction = { x: 1, y: 0 };
-    let nextDirection = { x: 1, y: 0 };
+    let directionQueue = [];
     let score = 0;
     let highScore = parseInt(localStorage.getItem('snakeHighScore')) || 0;
     let gameRunning = false;
@@ -177,7 +177,7 @@
             { x: 3, y: 10 },
         ];
         direction = { x: 1, y: 0 };
-        nextDirection = { x: 1, y: 0 };
+        directionQueue = [];
         score = 0;
         speedLevel = 1;
         gameOver = false;
@@ -207,7 +207,13 @@
     function update() {
         if (paused || gameOver) return;
 
-        direction = { ...nextDirection };
+        // 从方向队列取下一个方向
+        if (directionQueue.length > 0) {
+            const nextDir = directionQueue.shift();
+            if (!isOpposite(nextDir, direction)) {
+                direction = nextDir;
+            }
+        }
 
         const head = {
             x: snake[0].x + direction.x,
@@ -453,8 +459,10 @@
         const dir = DIRS[key];
         if (dir && gameRunning && !paused) {
             e.preventDefault();
-            if (!isOpposite(dir, direction)) {
-                nextDirection = { ...dir };
+            // 防反向：与当前方向比较，并与队列末尾方向比较
+            const lastQueued = directionQueue.length > 0 ? directionQueue[directionQueue.length - 1] : direction;
+            if (!isOpposite(dir, lastQueued) && directionQueue.length < 3) {
+                directionQueue.push({ ...dir });
             }
         }
     }
@@ -469,7 +477,10 @@
                 e.preventDefault();
                 if (!gameRunning) { startGame(); return; }
                 if (paused) return;
-                if (!isOpposite(dir, direction)) nextDirection = { ...dir };
+                const lastQueued = directionQueue.length > 0 ? directionQueue[directionQueue.length - 1] : direction;
+                if (!isOpposite(dir, lastQueued) && directionQueue.length < 3) {
+                    directionQueue.push({ ...dir });
+                }
             };
             btn.addEventListener('touchstart', handler, { passive: false });
             btn.addEventListener('mousedown', handler);
@@ -500,7 +511,9 @@
             let dir;
             if (absDx > absDy) dir = dx > 0 ? { x: 1, y: 0 } : { x: -1, y: 0 };
             else dir = dy > 0 ? { x: 0, y: 1 } : { x: 0, y: -1 };
-            if (!isOpposite(dir, direction)) nextDirection = dir;
+            if (!isOpposite(dir, direction) && directionQueue.length < 3) {
+                directionQueue.push(dir);
+            }
         }, { passive: true });
     }
 
