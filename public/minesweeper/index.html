@@ -14,60 +14,58 @@
             <span class="cloud-badge" id="cloudBadge">☁️ 本地</span>
         </header>
 
-        <div class="game-area">
-            <!-- 玩家名称 + 计分板 -->
-            <div class="top-row">
-                <div class="player-input-wrap">
-                    <label for="playerName">🏷️ 玩家</label>
-                    <input type="text" id="playerName" maxlength="12" placeholder="你的昵称">
-                </div>
-                <div class="score-board">
-                    <div class="score-item">
-                        <span class="label">💣 雷</span>
-                        <span id="minesCount" class="value">10</span>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="score-item">
-                        <span class="label">⏱️ 时间</span>
-                        <span id="timer" class="value">0</span>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="score-item">
-                        <span class="label">🏆 连胜</span>
-                        <span id="gamesWon" class="value">0</span>
-                    </div>
-                </div>
+        <!-- 统计栏 -->
+        <div class="stats-bar" id="statsBar">
+            <div class="stat-item">
+                <span class="label">💣 雷</span>
+                <span id="minesCount" class="value">10</span>
             </div>
-
-            <!-- 笑脸 + 游戏信息 -->
-            <div class="status-bar">
-                <button id="smileyBtn" class="smiley-btn">😊</button>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="label">⏱️ 时间</span>
+                <span id="timer" class="value">0</span>
             </div>
-
-            <!-- 扫雷网格 -->
-            <div class="grid-wrapper">
-                <div id="grid" class="grid"></div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="label">🏆 连胜</span>
+                <span id="gamesWon" class="value">0</span>
             </div>
-
-            <!-- 操作控制 -->
-            <div class="controls-bar">
-                <button id="newGameBtn" class="btn game-btn">🔄 新游戏</button>
-                <div class="difficulty-group">
-                    <button data-diff="beginner" class="diff-btn active">初级 9×9</button>
-                    <button data-diff="intermediate" class="diff-btn">中级 16×16</button>
-                    <button data-diff="hard" class="diff-btn">高级 30×16</button>
-                </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="label">🏷️</span>
+                <input type="text" id="playerName" maxlength="10" placeholder="昵称" style="background:transparent;border:1px solid rgba(255,255,255,0.08);border-radius:4px;padding:2px 6px;color:#eee;font-size:0.82rem;width:70px;outline:none;font-family:inherit">
             </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <button id="smileyBtn" style="background:none;border:none;font-size:1.4rem;cursor:pointer;padding:0;line-height:1">😊</button>
+            </div>
+        </div>
 
-            <!-- 排行榜 -->
-            <div class="leaderboard" id="leaderboard">
-                <div class="lb-header">
-                    <h3>🏆 排行榜</h3>
-                    <span class="lb-status" id="lbStatus">加载中...</span>
-                </div>
-                <div class="lb-list" id="lbList">
-                    <div class="lb-empty">正在连接云端...</div>
-                </div>
+        <!-- 难度标签 -->
+        <div class="diff-tabs" id="diffTabs">
+            <button data-diff="beginner" class="diff-btn active">初级 9×9</button>
+            <button data-diff="intermediate" class="diff-btn">中级 16×16</button>
+            <button data-diff="hard" class="diff-btn">高级 30×16</button>
+        </div>
+
+        <!-- 扫雷网格 -->
+        <div class="grid-wrapper">
+            <div id="grid" class="grid"></div>
+        </div>
+
+        <!-- 操作提示 -->
+        <div class="controls-bar">
+            <span class="hint"><kbd>左键</kbd> 翻开 · <kbd>右键</kbd> 标旗 · 长按标旗</span>
+        </div>
+
+        <!-- 排行榜 -->
+        <div class="leaderboard" id="leaderboard">
+            <div class="lb-header">
+                <h3>🏆 排行榜</h3>
+                <span class="lb-status" id="lbStatus">加载中...</span>
+            </div>
+            <div class="lb-list" id="lbList">
+                <div class="lb-empty">正在连接云端...</div>
             </div>
         </div>
     </div>

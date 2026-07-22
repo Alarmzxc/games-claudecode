@@ -7,7 +7,6 @@
     const timerEl = document.getElementById('timer');
     const gamesWonEl = document.getElementById('gamesWon');
     const smileyBtn = document.getElementById('smileyBtn');
-    const newGameBtn = document.getElementById('newGameBtn');
     const playerNameInput = document.getElementById('playerName');
     const cloudBadge = document.getElementById('cloudBadge');
     const lbList = document.getElementById('lbList');
@@ -246,8 +245,14 @@
         gridEl.innerHTML = '';
         cells = [];
 
-        // Calculate cell size based on container width
+        // Dynamically size wrapper based on difficulty
         var wrapper = document.querySelector('.grid-wrapper');
+        var targetCell = difficulty === 'hard' ? 24 : (difficulty === 'intermediate' ? 30 : 40);
+        var idealWidth = cols * targetCell + (cols - 1) + 8;
+        var maxVw = window.innerWidth - 40;
+        wrapper.style.maxWidth = Math.min(idealWidth, maxVw) + 'px';
+        wrapper.style.width = '100%';
+
         var maxWidth = wrapper.clientWidth;
         // Leave room for padding + gap
         var usableWidth = maxWidth - 4;
@@ -663,13 +668,6 @@
 
     // Smiley button - reset game
     smileyBtn.addEventListener('click', function () {
-        var overlay = document.querySelector('.overlay');
-        if (overlay) overlay.classList.add('hidden');
-        startNewGame();
-    });
-
-    // New game button
-    newGameBtn.addEventListener('click', function () {
         var overlay = document.querySelector('.overlay');
         if (overlay) overlay.classList.add('hidden');
         startNewGame();

@@ -24,11 +24,9 @@ header {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 24px;
-    padding: 12px 16px;
-    background: rgba(255, 255, 255, 0.06);
-    border-radius: 16px;
-    backdrop-filter: blur(12px);
+    margin-bottom: 20px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 header h1 {
@@ -45,17 +43,16 @@ header h1 {
     color: #aaa;
     text-decoration: none;
     font-size: 0.82rem;
-    padding: 5px 11px;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.08);
-    transition: all 0.2s;
+    padding: 5px 0;
+    transition: color 0.2s;
     white-space: nowrap;
     flex-shrink: 0;
+    border-bottom: 1px solid transparent;
 }
 
 .back-btn:hover {
-    background: rgba(255, 255, 255, 0.15);
     color: #fff;
+    border-bottom-color: #fbbf24;
 }
 
 .cloud-badge {
@@ -135,24 +132,20 @@ header h1 {
 .score-board {
     display: flex;
     align-items: center;
-    gap: 0;
+    gap: 10px;
     flex: 1;
-    background: rgba(255, 255, 255, 0.06);
-    border-radius: 14px;
-    padding: 6px 2px;
-    backdrop-filter: blur(8px);
+    padding: 4px 2px;
 }
 
 .score-item {
-    flex: 1;
     text-align: center;
-    padding: 3px 4px;
+    padding: 2px 4px;
 }
 
 .score-item .label {
     display: block;
     font-size: 0.6rem;
-    color: #888;
+    color: #666;
     text-transform: uppercase;
     letter-spacing: 1.2px;
     margin-bottom: 1px;
@@ -167,8 +160,8 @@ header h1 {
 
 .divider {
     width: 1px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.08);
+    height: 24px;
+    background: rgba(255, 255, 255, 0.06);
     flex-shrink: 0;
 }
 
@@ -340,18 +333,14 @@ header h1 {
 }
 
 .control-group {
-    flex: 1;
-    background: rgba(255, 255, 255, 0.06);
-    border-radius: 14px;
-    padding: 12px 10px;
+    padding: 8px 6px;
     text-align: center;
-    backdrop-filter: blur(8px);
 }
 
 .control-group h3 {
     font-size: 0.72rem;
     color: #999;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     font-weight: 600;
 }
 
