@@ -451,11 +451,10 @@ header h1 {
 .overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.72);
+    background: rgba(0, 0, 0, 0.4);
     display: flex;
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(4px);
     transition: opacity 0.3s;
     border-radius: 16px;
 }

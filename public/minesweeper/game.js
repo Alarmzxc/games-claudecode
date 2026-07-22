@@ -599,12 +599,19 @@
             '<div class="overlay-content">' +
                 '<h2>' + title + '</h2>' +
                 '<p>' + message + '</p>' +
-                '<button id="overlayRestartBtn" class="btn">' + btnText + '</button>' +
+                '<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">' +
+                    '<button id="overlayRestartBtn" class="btn">' + btnText + '</button>' +
+                    '<button id="overlayDismissBtn" class="btn" style="background:rgba(255,255,255,0.1);color:#ccc;font-size:0.85rem">查看棋盘</button>' +
+                '</div>' +
             '</div>';
 
         document.getElementById('overlayRestartBtn').addEventListener('click', function () {
             overlay.classList.add('hidden');
             startNewGame();
+        });
+
+        document.getElementById('overlayDismissBtn').addEventListener('click', function () {
+            overlay.classList.add('hidden');
         });
     }
 
