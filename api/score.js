@@ -96,9 +96,14 @@ export async function GET(request) {
         const url = new URL(request.url);
         const game = url.searchParams.get('game') || 'snake';
 
-        // 健康检查
+        // 健康检查 — 真正测试 blob 连通性
         if (game === 'ping') {
-            return Response.json({ status: 'ok' });
+            try {
+                await list({ prefix: 'scores_' });
+                return Response.json({ status: 'ok', blob: true });
+            } catch {
+                return Response.json({ status: 'ok', blob: false }, { status: 500 });
+            }
         }
 
         const scores = await readScores(game);

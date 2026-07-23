@@ -85,11 +85,18 @@
     async function checkCloudConnection() {
         try {
             const res = await fetch('/api/score?game=ping');
-            if (res.ok || res.status === 400) {
-                CLOUD_AVAILABLE = true;
-                cloudBadge.textContent = '☁️ 已连接';
-                cloudBadge.className = 'cloud-badge online';
-                return true;
+            if (res.ok) {
+                const data = await res.json();
+                if (data.blob === true) {
+                    CLOUD_AVAILABLE = true;
+                    cloudBadge.textContent = '☁️ 已连接';
+                    cloudBadge.className = 'cloud-badge online';
+                    return true;
+                }
+                CLOUD_AVAILABLE = false;
+                cloudBadge.textContent = '☁️ Blob未通';
+                cloudBadge.className = 'cloud-badge error';
+                return false;
             }
             throw new Error('HTTP ' + res.status);
         } catch {
