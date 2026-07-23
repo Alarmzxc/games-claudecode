@@ -263,6 +263,7 @@
         var gridWidth = cellSize * cols + gapTotal + 4;
 
         gridEl.style.gridTemplateColumns = 'repeat(' + cols + ', ' + cellSize + 'px)';
+        gridEl.style.gridAutoRows = cellSize + 'px';
         gridEl.style.setProperty('--cell-size', cellSize + 'px');
 
         // Per-cell long press tracking (Map<cellId, {triggered, timer}>)
