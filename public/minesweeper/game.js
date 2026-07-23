@@ -558,12 +558,14 @@
             }
 
             // Submit to cloud
+            var cloudMsg = '';
             if (CLOUD_AVAILABLE && timerValue > 0) {
                 submitScore(bestTime).then(function (result) {
                     if (result) {
                         renderLeaderboard();
                     }
                 });
+                cloudMsg = '<br><span style="color:#7dd3fc;font-size:0.8rem">☁️ 已同步至云端排行榜</span>';
             }
 
             // Update UI
@@ -573,7 +575,7 @@
             showOverlay(
                 '🎉 你赢了！',
                 '用时 ' + timerValue + ' 秒，共 ' + mineCount + ' 颗雷' +
-                    (isNewBest ? '<br><span style="color:#fbbf24;font-weight:700">🏆 新纪录！</span>' : ''),
+                    (isNewBest ? '<br><span style="color:#fbbf24;font-weight:700">🏆 新纪录！</span>' : '') + cloudMsg,
                 '😎 再来一局'
             );
 
@@ -695,7 +697,7 @@
     checkCloudConnection().then(function (connected) {
         if (connected) {
             renderLeaderboard();
-            setInterval(renderLeaderboard, 60000);
+            // 排行榜仅在提交分数成功后刷新，不自动轮询
         } else {
             lbStatus.textContent = '离线模式';
             lbList.innerHTML = '<div class="lb-empty">☁️ 未连接到云端，分数仅保存在本地</div>';

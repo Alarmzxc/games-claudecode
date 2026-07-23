@@ -956,7 +956,7 @@
     checkCloudConnection().then(function (connected) {
         if (connected) {
             renderLeaderboard();
-            setInterval(renderLeaderboard, 60000);
+            // 排行榜仅在提交分数成功后刷新，不自动轮询
         } else {
             lbStatus.textContent = '离线模式';
             lbList.innerHTML = '<div class="lb-empty">☁️ 未连接到云端，分数仅保存在本地</div>';

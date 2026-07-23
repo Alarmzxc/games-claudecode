@@ -2,6 +2,11 @@ import { put, list, del } from '@vercel/blob';
 
 const SCORE_FILE_PREFIX = 'scores_';
 
+// 各游戏的计分方向: 'high'=越高越好, 'low'=越低越好
+const GAME_SCORING = {
+    minesweeper: 'low',  // 时间越短越好
+};
+
 /**
  * Read scores array from blob storage for a given game.
  * Uses list() to find the actual blob URL (avoids hardcoding the URL format).
@@ -107,17 +112,21 @@ export async function GET(request) {
         }
 
         const scores = await readScores(game);
+        const scoring = GAME_SCORING[game] || 'high'; // 默认越高越好
 
-        // 每个玩家只取最高分
+        // 每个玩家只取最佳分
         const bestPerPlayer = new Map();
         scores.forEach(s => {
-            const current = bestPerPlayer.get(s.player) || 0;
-            if (s.score > current) bestPerPlayer.set(s.player, s.score);
+            const current = bestPerPlayer.get(s.player);
+            if (current === undefined ||
+                (scoring === 'high' ? s.score > current : s.score < current)) {
+                bestPerPlayer.set(s.player, s.score);
+            }
         });
 
         const leaderboard = Array.from(bestPerPlayer.entries())
             .map(([player, score]) => ({ player, score }))
-            .sort((a, b) => b.score - a.score)
+            .sort((a, b) => scoring === 'high' ? b.score - a.score : a.score - b.score)
             .slice(0, 50);
 
         return Response.json({

@@ -510,6 +510,10 @@ kbd {
     flex-shrink: 0;
 }
 
+.lb-me {
+    background: rgba(255, 215, 0, 0.08);
+}
+
 /* ---- Mobile ---- */
 @media (max-width: 560px) {
     body {
